@@ -26,11 +26,5 @@ public:
 
 int main()
 {
-	shared_ptr<Entity> ptr = new Entity(12, 2, "Thomas");
-	{
-		shared_ptr<Entity> nptr = ptr;
-		nptr->print();
-	}
-
 	std::cin.get();
 }
