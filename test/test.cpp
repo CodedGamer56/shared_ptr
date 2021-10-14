@@ -13,7 +13,7 @@ public:
 		std::cout << "Initialized " << name << std::endl;
 	}
 
-	void print()
+	void print() const
 	{
 		std::cout << name << "( " << x << ", " << y << ")" << std::endl;
 	}

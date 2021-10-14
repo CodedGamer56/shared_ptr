@@ -6,7 +6,7 @@ private:
 
     struct Utility
     {
-        int ptr_count = 0;
+        unsigned int ptr_count = 0;
     };
 
     Utility* util;
@@ -34,7 +34,7 @@ public:
 
     void reset()     
     {
-        if (util->ptr_count == 1 && obj != nullptr)
+        if (util->ptr_count == 1)
         {
             delete obj;
             util->ptr_count--;
@@ -42,34 +42,33 @@ public:
         else
         {
             util->ptr_count--;
-            obj = nullptr;
         }
+
+        obj = nullptr;
     }
     
-    void operator= (const shared_ptr<T>& ptr)
+    shared_ptr& operator= (const shared_ptr& ptr)
     {
-        if (util->ptr_count == 1 && obj != nullptr)
+        if (util->ptr_count == 1)
         {
             delete obj;
-
-            obj = ptr.obj;
-            util = ptr.util;
-            util->ptr_count++;
         }
         else
         {
             if (util->ptr_count != 0)
                 util->ptr_count--;
-
-            util = ptr.util;
-            obj = ptr.obj;
-            util->ptr_count++;
         }
+
+        obj = ptr.obj;
+        util = ptr.util;
+        util->ptr_count++;
+
+        return *this;
     }
 
-    void operator= (T* m_ptr)
+    T* operator= (T* m_ptr)
     {
-        if (util->ptr_count == 1 && obj != nullptr)
+        if (util->ptr_count == 1)
         {
             delete obj;
         }
@@ -77,26 +76,28 @@ public:
         {
             if(util->ptr_count != 0)
                 util->ptr_count--;
-
-            obj = m_ptr;
-            util = new Utility;
-            util->ptr_count++;
         }
-    }
 
-    T* operator-> () const
-    {
+        obj = m_ptr;
+        util = new Utility;
+        util->ptr_count++;
+
         return obj;
     }
-
-    T& operator& () const
+    
+    T& operator*() const
+    {
+        return *obj;
+    };
+    
+    T* operator-> () const
     {
         return obj;
     }
 
     ~shared_ptr()
     {
-        if (util->ptr_count == 1 && obj != nullptr)
+        if (util->ptr_count == 1)
         {
             delete obj;
             delete util;
